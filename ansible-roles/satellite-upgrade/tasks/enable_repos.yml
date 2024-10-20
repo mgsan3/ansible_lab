@@ -1,0 +1,18 @@
+---
+- name: Enable Satellite Maintenance repository using subscription-manager
+  ansible.builtin.shell: subscription-manager repos --enable={{ item }}
+  loop:
+    - "satellite-maintenance-6.15-for-rhel-8-x86_64-rpms"
+  register: enable_repo_result
+  changed_when: "'enabled' not in enable_repo_result.stdout"
+  failed_when: "'Error' in enable_repo_result.stderr"
+  notify:
+    - Send repository enablement failure notification
+
+- name: Enable Satellite maintain module for version 6.15 using dnf
+  ansible.builtin.shell: dnf module enable satellite-maintain:6.15 -y
+  register: enable_module_result
+  changed_when: "'enabled' not in enable_module_result.stdout"
+  failed_when: "'Error' in enable_module_result.stderr"
+  notify:
+    - Send module enablement failure notification

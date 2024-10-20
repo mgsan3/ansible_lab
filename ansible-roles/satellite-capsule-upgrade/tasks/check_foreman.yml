@@ -1,0 +1,14 @@
+---
+- name: Verify that foreman_url is set correctly
+  ansible.builtin.lineinfile:
+    path: /etc/foreman-proxy/settings.yml
+    regexp: '^:foreman_url:'
+    line: ":foreman_url: 'https://{{ satellite_fqdn }}'"
+  register: foreman_url_check
+  notify:
+    - Send foreman_url check failure notification
+
+- name: Fail if foreman_url is not set correctly
+  ansible.builtin.fail:
+    msg: "The foreman_url setting in /etc/foreman-proxy/settings.yml is incorrect."
+  when: foreman_url_check is failed

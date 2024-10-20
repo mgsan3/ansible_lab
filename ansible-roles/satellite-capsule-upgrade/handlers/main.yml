@@ -1,0 +1,37 @@
+---
+# handlers file for satellite-capsule-upgrade
+- name: Send repository enablement failure notification
+  ansible.builtin.debug:
+    msg: "Failed to enable required repositories for Satellite Capsule upgrade."
+
+- name: Send dnf clean failure notification
+  ansible.builtin.debug:
+    msg: "Failed to clean dnf metadata."
+
+- name: Send self-upgrade failure notification
+  ansible.builtin.debug:
+    msg: "Satellite self-upgrade failed."
+
+- name: Send foreman_url check failure notification
+  ansible.builtin.debug:
+    msg: "foreman_url check failed."
+
+- name: Send version check failure notification
+  ansible.builtin.debug:
+    msg: "Satellite Capsule version 6.15 is not available."
+
+- name: Send pre-upgrade check failure notification
+  ansible.builtin.debug:
+    msg: "Pre-upgrade checks for v6.15 failed."
+
+- name: Send upgrade failure notification
+  ansible.builtin.debug:
+    msg: "Satellite Capsule upgrade to v6.15 failed."
+
+- name: Send upgrade success notification
+  ansible.builtin.debug:
+    msg: "Satellite Capsule upgrade to v6.15 completed successfully."
+
+- name: Send reboot success notification
+  ansible.builtin.debug:
+    msg: "System rebooted successfully after Satellite Capsule upgrade."

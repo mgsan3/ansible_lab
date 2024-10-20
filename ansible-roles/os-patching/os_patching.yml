@@ -1,0 +1,11 @@
+---
+- name: Apply OS patches and monitor services
+  hosts: linux_servers
+  become: yes
+  roles:
+    - role: os_patching
+      vars:
+        web_service: "nginx"
+        db_service: "postgresql"
+        app_service: "custom_app"
+        web_service_url: "http://myapp.example.com"  # Optional HTTP check

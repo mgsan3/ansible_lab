@@ -1,0 +1,3 @@
+---
+# defaults file for satellite-capsule-upgrade
+satellite_fqdn: "satellite.example.com"

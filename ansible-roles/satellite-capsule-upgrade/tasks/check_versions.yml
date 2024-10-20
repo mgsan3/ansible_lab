@@ -1,0 +1,13 @@
+---
+- name: List available Satellite Capsule versions using satellite-maintain
+  ansible.builtin.shell: satellite-maintain upgrade list-versions
+  register: satellite_versions
+  changed_when: "'6.15' not in satellite_versions.stdout"
+  failed_when: "'ERROR' in satellite_versions.stdout"
+  notify:
+    - Send version check failure notification
+
+- name: Fail if Satellite Capsule version 6.15 is not available
+  ansible.builtin.fail:
+    msg: "Satellite Capsule version 6.15 is not available in the list."
+  when: "'6.15' not in satellite_versions.stdout"

@@ -1,0 +1,40 @@
+---
+# Step 1: Check web service status
+- name: Check web service status (e.g., Apache, Nginx)
+  ansible.builtin.systemd:
+    name: "{{ web_service }}"
+    state: started
+  register: web_service_status
+  when: web_service is defined
+  failed_when: web_service_status.status.State != 'running'
+  notify: Send web service failure notification
+
+# Optional: Perform HTTP check for web service if applicable
+- name: Check HTTP response (optional)
+  ansible.builtin.uri:
+    url: "{{ web_service_url }}"
+    status_code: 200
+  register: http_check
+  when: web_service_url is defined
+  failed_when: http_check.status != 200
+  notify: Send HTTP failure notification
+
+# Step 2: Check database service status
+- name: Check database service status (e.g., MySQL, PostgreSQL)
+  ansible.builtin.systemd:
+    name: "{{ db_service }}"
+    state: started
+  register: db_service_status
+  when: db_service is defined
+  failed_when: db_service_status.status.State != 'running'
+  notify: Send db service failure notification
+
+# Step 3: Check application service status
+- name: Check application service status (e.g., custom application)
+  ansible.builtin.systemd:
+    name: "{{ app_service }}"
+    state: started
+  register: app_service_status
+  when: app_service is defined
+  failed_when: app_service_status.status.State != 'running'
+  notify: Send app service failure notification

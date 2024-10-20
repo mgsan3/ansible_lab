@@ -1,0 +1,35 @@
+---
+# tasks file for satellite-capsule-upgrade
+- name: Enable Satellite Maintenance and Capsule repositories
+  include_tasks: enable_repos.yml
+
+- name: Clean dnf metadata
+  ansible.builtin.shell: dnf clean metadata
+  register: clean_metadata_result
+  changed_when: clean_metadata_result.rc == 0
+  failed_when: clean_metadata_result.rc != 0
+  notify:
+    - Send dnf clean failure notification
+
+- name: Run satellite-maintain self-upgrade
+  ansible.builtin.shell: satellite-maintain self-upgrade
+  register: self_upgrade_result
+  changed_when: "'Upgrade completed successfully' in self_upgrade_result.stdout"
+  failed_when: "'ERROR' in self_upgrade_result.stdout"
+  notify:
+    - Send self-upgrade failure notification
+
+- name: Verify foreman_url in /etc/foreman-proxy/settings.yml
+  include_tasks: check_foreman.yml
+
+- name: Check available Capsule versions
+  include_tasks: check_versions.yml
+
+- name: Run pre-upgrade checks for v6.15
+  include_tasks: pre_upgrade.yml
+
+- name: Perform Capsule upgrade to v6.15
+  include_tasks: upgrade_capsule.yml
+
+- name: Reboot the system if needed
+  include_tasks: reboot_system.yml

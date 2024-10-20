@@ -1,0 +1,37 @@
+---
+# Notification handlers
+
+- name: Send success notification
+  ansible.builtin.debug:
+    msg: "OS patches applied successfully on {{ inventory_hostname }}."
+
+- name: Send failure notification
+  ansible.builtin.debug:
+    msg: "OS patching failed on {{ inventory_hostname }}. Check logs for details."
+
+- name: Send no updates notification
+  ansible.builtin.debug:
+    msg: "No updates available on {{ inventory_hostname }}."
+
+- name: Send reboot notification
+  ansible.builtin.debug:
+    msg: "{{ inventory_hostname }} is being rebooted after patching."
+
+---
+# Notification handlers for monitoring services
+
+- name: Send web service failure notification
+  ansible.builtin.debug:
+    msg: "Web service {{ web_service }} on {{ inventory_hostname }} failed to start or is not running."
+
+- name: Send HTTP failure notification
+  ansible.builtin.debug:
+    msg: "Web service {{ web_service }} on {{ inventory_hostname }} is not responding to HTTP requests."
+
+- name: Send db service failure notification
+  ansible.builtin.debug:
+    msg: "Database service {{ db_service }} on {{ inventory_hostname }} failed to start or is not running."
+
+- name: Send app service failure notification
+  ansible.builtin.debug:
+    msg: "Application service {{ app_service }} on {{ inventory_hostname }} failed to start or is not running."

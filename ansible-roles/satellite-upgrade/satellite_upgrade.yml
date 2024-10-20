@@ -1,0 +1,6 @@
+---
+- name: Upgrade Red Hat Satellite from v6.14 to v6.15
+  hosts: satellite_servers
+  become: yes
+  roles:
+    - satellite_upgrade

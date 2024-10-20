@@ -1,0 +1,24 @@
+---
+- name: Stop web service (e.g., Apache, Nginx)
+  ansible.builtin.systemd:
+    name: "{{ web_service }}"
+    state: stopped
+  when: web_service is defined
+  failed_when: result.rc != 0
+  notify: Send failure notification
+
+- name: Stop database service (e.g., MySQL, PostgreSQL)
+  ansible.builtin.systemd:
+    name: "{{ db_service }}"
+    state: stopped
+  when: db_service is defined
+  failed_when: result.rc != 0
+  notify: Send failure notification
+
+- name: Stop application service (e.g., custom application)
+  ansible.builtin.systemd:
+    name: "{{ app_service }}"
+    state: stopped
+  when: app_service is defined
+  failed_when: result.rc != 0
+  notify: Send failure notification

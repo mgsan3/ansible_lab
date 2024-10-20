@@ -1,0 +1,9 @@
+---
+- name: Perform Satellite Capsule upgrade to v6.15
+  ansible.builtin.shell: satellite-maintain upgrade run --target-version=6.15
+  register: upgrade_result
+  changed_when: "'Upgrade completed successfully' in upgrade_result.stdout"
+  failed_when: "'ERROR' in upgrade_result.stdout"
+  notify:
+    - Send upgrade failure notification
+    - Send upgrade success notification

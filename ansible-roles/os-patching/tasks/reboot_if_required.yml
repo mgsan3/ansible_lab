@@ -1,0 +1,29 @@
+---
+- name: Reboot the server if required (for RHEL)
+  ansible.builtin.reboot:
+    msg: "Rebooting after applying patches"
+    pre_reboot_delay: 30
+    post_reboot_delay: 60
+    reboot_timeout: 600
+  when: reboot_required.rc == 1 and ansible_facts['os_family'] == "RedHat"
+  failed_when: result.rc != 0
+  ignore_errors: no  # Stop if reboot fails
+  notify: Send reboot notification
+
+- name: Reboot the server if required (for Debian/Ubuntu)
+  ansible.builtin.reboot:
+    msg: "Rebooting after applying patches"
+    pre_reboot_delay: 30
+    post_reboot_delay: 60
+    reboot_timeout: 600
+  when: reboot_required.stat.exists and ansible_facts['os_family'] == "Debian"
+  failed_when: result.rc != 0
+  ignore_errors: no  # Stop if reboot fails
+  notify: Send reboot notification
+
+- name: Wait for the server to become reachable after reboot
+  ansible.builtin.wait_for_connection:
+    timeout: 300
+  when: reboot_required is defined and reboot_required.rc == 1
+  failed_when: result.rc != 0
+  notify: Send success notification

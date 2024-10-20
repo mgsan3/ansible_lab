@@ -1,0 +1,15 @@
+---
+- name: Stop services
+  include_tasks: stop_services.yml
+
+- name: Check and apply OS patches
+  include_tasks: apply_patches.yml
+
+- name: Reboot if necessary
+  include_tasks: reboot_if_required.yml
+
+- name: Start services
+  include_tasks: start_services.yml
+
+- name: Monitor services post patching
+  include_tasks: monitor_services.yml

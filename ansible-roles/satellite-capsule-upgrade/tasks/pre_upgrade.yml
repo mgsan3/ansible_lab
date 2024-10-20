@@ -1,0 +1,13 @@
+---
+- name: Run pre-upgrade checks for v6.15
+  ansible.builtin.shell: satellite-maintain upgrade check --target-version 6.15
+  register: pre_upgrade_check
+  changed_when: "'[OK]' not in pre_upgrade_check.stdout"
+  failed_when: "'ERROR' in pre_upgrade_check.stdout"
+  notify:
+    - Send pre-upgrade check failure notification
+
+- name: Fail if pre-upgrade checks fail
+  ansible.builtin.fail:
+    msg: "Pre-upgrade checks for v6.15 failed."
+  when: "'[FAIL]' in pre_upgrade_check.stdout"

@@ -1,0 +1,5 @@
+---
+web_service: "httpd"        # Default to Apache for web service
+db_service: "mariadb"       # Default to MariaDB for database
+app_service: "myapp"        # Example custom application service
+web_service_url: "http://localhost"  # Optional URL for web service monitoring

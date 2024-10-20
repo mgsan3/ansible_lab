@@ -1,0 +1,16 @@
+---
+# tasks file for satellite-upgrade
+- name: Enable Satellite Maintenance repository
+  include_tasks: enable_repos.yml
+
+- name: Check available Satellite versions
+  include_tasks: check_versions.yml
+
+- name: Run pre-upgrade checks for v6.15
+  include_tasks: pre_upgrade.yml
+
+- name: Perform Satellite upgrade to v6.15
+  include_tasks: upgrade_satellite.yml
+
+- name: Reboot the system if needed
+  include_tasks: reboot_system.yml

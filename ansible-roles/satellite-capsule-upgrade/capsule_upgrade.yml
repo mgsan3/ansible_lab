@@ -1,0 +1,6 @@
+---
+- name: Upgrade Red Hat Satellite Capsule from v6.14 to v6.15
+  hosts: capsule_servers
+  become: yes
+  roles:
+    - satellite_capsule_upgrade
