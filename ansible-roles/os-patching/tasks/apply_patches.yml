@@ -1,0 +1,55 @@
+---
+# Step 1: Check for available updates
+- name: Check for available updates (RHEL/CentOS)
+  ansible.builtin.shell: yum check-update
+  register: updates_available
+  changed_when: updates_available.rc == 100
+  failed_when: updates_available.rc not in [0, 100, 1]  # Handle valid exit codes
+  ignore_errors: no  # Stop playbook on error
+  when: ansible_facts['os_family'] == "RedHat"
+  notify:
+    - Send success notification
+    - Send failure notification
+
+- name: Check for available updates (Ubuntu/Debian)
+  ansible.builtin.apt:
+    update_cache: yes
+  register: updates_available
+  changed_when: updates_available.cache_update_time is defined and updates_available.cache_update_time > 0
+  failed_when: updates_available.cache_update_time is not defined
+  ignore_errors: no  # Stop playbook on error
+  when: ansible_facts['os_family'] == "Debian"
+  notify:
+    - Send success notification
+    - Send failure notification
+
+# Step 2: Apply updates only if there are any
+- name: Apply OS patches (for RHEL/CentOS)
+  ansible.builtin.yum:
+    name: "*"
+    state: latest
+  when: updates_available.rc == 100 and ansible_facts['os_family'] == "RedHat"
+  failed_when: result.rc != 0
+  notify: Send success notification
+
+- name: Apply OS patches (for Ubuntu/Debian)
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: yes
+  when: updates_available.cache_update_time is defined and updates_available.cache_update_time > 0 and ansible_facts['os_family'] == "Debian"
+  failed_when: result.rc != 0
+  notify: Send success notification
+
+# Step 3: Check if reboot is required (RHEL/CentOS)
+- name: Check if reboot is required (for RHEL/CentOS)
+  ansible.builtin.command: needs-restarting -r
+  register: reboot_required
+  failed_when: false  # Allow task to proceed regardless of result
+  when: ansible_facts['os_family'] == "RedHat"
+
+# Step 4: Check if reboot is required (Ubuntu/Debian)
+- name: Check if reboot is required (for Ubuntu/Debian)
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: reboot_required
+  when: ansible_facts['os_family'] == "Debian"
