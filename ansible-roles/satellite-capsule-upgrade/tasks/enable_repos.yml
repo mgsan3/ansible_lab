@@ -2,8 +2,8 @@
 - name: Enable Satellite Maintenance and Capsule repositories using subscription-manager
   ansible.builtin.shell: subscription-manager repos --enable={{ item }}
   loop:
-    - "rhel-8-for-x86_64-satellite-maintenance-6-rpms"
-    - "rhel-8-for-x86_64-satellite-capsule-6.15-rpms"
+    - "satellite-maintenance-6.15-for-rhel-8-x86_64-rpms"
+    - "satellite-capsule-6.15-for-rhel-8-x86_64-rpms"
   register: enable_repo_result
   changed_when: "'enabled' not in enable_repo_result.stdout"
   failed_when: "'Error' in enable_repo_result.stderr"
