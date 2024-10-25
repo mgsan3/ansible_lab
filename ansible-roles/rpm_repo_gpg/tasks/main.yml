@@ -1,0 +1,5 @@
+---
+# tasks file for rpm_repo_gpg
+- include_tasks: check_file_count.yml
+- include_tasks: sign_new_files.yml
+- include_tasks: repo_update.yml

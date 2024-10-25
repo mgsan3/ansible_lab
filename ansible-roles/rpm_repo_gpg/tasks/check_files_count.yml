@@ -1,0 +1,11 @@
+---
+- name: Check current file count in RPM directory
+  ansible.builtin.find:
+    paths: "{{ rpm_directory }}"
+    patterns: "*.rpm"
+  register: rpm_files_initial
+
+- name: Record initial file count
+  set_fact:
+    initial_file_count: "{{ rpm_files_initial.matched | default(0) }}"
+    initial_file_list: "{{ rpm_files_initial.files | map(attribute='path') | list }}"

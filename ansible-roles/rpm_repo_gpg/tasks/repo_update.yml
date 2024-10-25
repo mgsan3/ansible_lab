@@ -1,0 +1,10 @@
+---
+- name: Run createrepo to update the repository metadata
+  ansible.builtin.command:
+    cmd: "createrepo {{ rpm_directory }}"
+  when: new_rpm_files | length > 0
+1~---
+- name: Run createrepo to update the repository metadata
+  ansible.builtin.command:
+    cmd: "createrepo {{ rpm_directory }}"
+  when: new_rpm_files | length > 0

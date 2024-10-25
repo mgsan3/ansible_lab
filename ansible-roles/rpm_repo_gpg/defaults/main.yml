@@ -1,0 +1,8 @@
+---
+# defaults file for rpm_repo_gpg
+---
+# Directory to monitor for new RPMs
+rpm_directory: "/path/to/rpm_directory"
+
+# Encryption passphrase for GPG (Use vault to keep it secure)
+gpg_passphrase: "{{ vault_gpg_passphrase }}"

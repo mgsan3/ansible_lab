@@ -1,0 +1,15 @@
+---
+- name: Check for new RPM files in the directory
+  ansible.builtin.find:
+    paths: "{{ rpm_directory }}"
+    patterns: "*.rpm"
+  register: rpm_files_current
+
+- name: Identify newly added files
+  set_fact:
+    new_rpm_files: "{{ rpm_files_current.files | selectattr('path', 'not in', initial_file_list) | map(attribute='path') | list }}"
+
+- name: Sign new RPM files with GPG key
+  ansible.builtin.shell: "rpm --addsign {{ item }}"
+  with_items: "{{ new_rpm_files }}"
+  when: new_rpm_files | length > 0
