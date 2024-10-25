@@ -9,7 +9,10 @@
   set_fact:
     new_rpm_files: "{{ rpm_files_current.files | selectattr('path', 'not in', initial_file_list) | map(attribute='path') | list }}"
 
-- name: Sign new RPM files with GPG key
-  ansible.builtin.shell: "rpm --addsign {{ item }}"
+- name: Sign new RPM files with GPG key using expect
+  ansible.builtin.expect:
+    command: "rpm --addsign {{ item }}"
+    responses:
+      "Enter pass phrase:": "{{ gpg_passphrase }}"
   with_items: "{{ new_rpm_files }}"
   when: new_rpm_files | length > 0
