@@ -1,0 +1,6 @@
+---
+- name: Sync content for {{ item.key }} Capsules
+  include_tasks: wait.yml
+  loop: "{{ item.value }}"
+  loop_control:
+    label: "{{ item.name }}"

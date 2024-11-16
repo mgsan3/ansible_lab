@@ -1,0 +1,16 @@
+---
+- name: Promote CCVs
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - role: promote_ccvs
+      vars:
+        satellite_user: "your_username"
+        satellite_password: "your_password"
+        satellite_server: "satellite.example.com"
+        lifecycle_environment: "Production"
+        satellite_organization: "Your_Organization"
+        ccv_list:
+          - { name: "RHEL7-CCV" }
+          - { name: "RHEL8-CCV" }
+          - { name: "RHEL9-CCV" }

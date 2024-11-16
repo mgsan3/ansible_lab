@@ -1,0 +1,11 @@
+---
+# vars file for content_promote
+ccv_list:
+  - { name: "RHEL7-CCV" }
+  - { name: "RHEL8-CCV" }
+  - { name: "RHEL9-CCV" }
+lifecycle_environment: 
+  - "Target_Lifecycle_Environment"
+  - "Target_Lifecycle_Environment1"
+satellite_organization: "Your_Organization"
+satellite_server: "satellite.example.com"

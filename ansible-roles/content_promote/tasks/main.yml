@@ -1,0 +1,4 @@
+---
+# tasks file for content_promote
+- name: Promote content and wait for completion
+  include_tasks: promote.yml

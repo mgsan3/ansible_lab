@@ -1,0 +1,19 @@
+---
+- name: Trigger sync for Capsule {{ item.name }} for OS {{ item.os }}
+  command: >
+    hammer capsule content synchronize
+    --capsule "{{ item.name }}"
+    --organization "{{ satellite_organization }}"
+    --content-view "{{ item.ccv }}"
+    --force
+  register: sync_task
+  when: hammer_ping.rc == 0
+
+- name: Wait for sync task for Capsule {{ item.name }} to complete
+  shell: >
+    hammer task wait --id {{ sync_task.stdout | regex_search('ID: (\\d+)', '\\1') }}
+  when: sync_task.rc == 0
+
+- name: Display sync result for Capsule {{ item.name }}
+  debug:
+    msg: "Synchronization completed for Capsule {{ item.name }} (OS: {{ item.os }}, CCV: {{ item.ccv }})"

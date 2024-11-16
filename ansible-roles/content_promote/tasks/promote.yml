@@ -1,0 +1,6 @@
+---
+- name: Promote CCVs
+  include_tasks: wait.yml
+  loop: "{{ ccv_list }}"
+  loop_control:
+    loop_var: ccv

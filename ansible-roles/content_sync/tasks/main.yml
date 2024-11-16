@@ -1,0 +1,7 @@
+---
+# tasks file for content_sync
+- name: Sync content for each location
+  include_tasks: sync.yml
+  loop: "{{ capsules_by_location | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"

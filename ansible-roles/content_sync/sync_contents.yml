@@ -1,0 +1,18 @@
+---
+- name: Sync Content to Satellite Capsules
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - role: sync_contents
+      vars:
+        satellite_user: "your_username"
+        satellite_password: "your_password"
+        satellite_server: "satellite.example.com"
+        satellite_organization: "Your_Organization"
+        capsules_by_location:
+          NewYork:
+            - { name: "capsule1.ny.example.com", os: "RHEL7", ccv: "RHEL7-CCV" }
+            - { name: "capsule2.ny.example.com", os: "RHEL8", ccv: "RHEL8-CCV" }
+          SanFrancisco:
+            - { name: "capsule1.sf.example.com", os: "RHEL9", ccv: "RHEL9-CCV" }
+            - { name: "capsule2.sf.example.com", os: "RHEL8", ccv: "RHEL8-CCV" }

@@ -1,0 +1,18 @@
+---
+- name: Trigger Promotion for {{ ccv.name }}
+  command: >
+    hammer content-view version promote
+    --content-view "{{ ccv.name }}"
+    --organization "{{ satellite_organization }}"
+    --to-lifecycle-environment "{{ lifecycle_environment }}"
+  register: promote_task
+  when: hammer_ping.rc == 0
+
+- name: Wait for Promotion Task for {{ ccv.name }} to Complete
+  shell: >
+    hammer task wait --id {{ promote_task.stdout | regex_search('ID: (\\d+)', '\\1') }}
+  when: promote_task.rc == 0
+
+- name: Display Promotion Result for {{ ccv.name }}
+  debug:
+    msg: "Promotion completed for CCV {{ ccv.name }} with task ID {{ promote_task.stdout }}"

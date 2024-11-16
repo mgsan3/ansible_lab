@@ -1,0 +1,10 @@
+---
+# vars file for content_sync
+# Capsules and their associated CCVs for different locations and OS
+capsules_by_location:
+  NewYork:
+    - { name: "capsule1.ny.example.com", os: "RHEL7", ccv: "RHEL7-CCV" }
+    - { name: "capsule2.ny.example.com", os: "RHEL8", ccv: "RHEL8-CCV" }
+  SanFrancisco:
+    - { name: "capsule1.sf.example.com", os: "RHEL9", ccv: "RHEL9-CCV" }
+    - { name: "capsule2.sf.example.com", os: "RHEL8", ccv: "RHEL8-CCV" }
